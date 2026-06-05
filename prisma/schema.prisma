@@ -1,0 +1,322 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Role {
+  ADVISOR
+  ASSISTANT
+  CLIENT
+}
+
+enum CaseStatus {
+  INQUIRY
+  CONSULTATION_SCHEDULED
+  ACCEPTED
+  DOCUMENTS_PENDING
+  IN_PROGRESS
+  HEARING_SCHEDULED
+  AWAITING_JUDGMENT
+  RESOLVED
+  CLOSED
+  REJECTED
+}
+
+enum CaseType {
+  PROPERTY_DISPUTE
+  FAMILY_LAW
+  CONSUMER_PROTECTION
+  CONTRACT_DISPUTE
+  SUCCESSION
+  LANDLORD_TENANT
+  DEBT_RECOVERY
+  RTI_GRIEVANCE
+  DOCUMENT_DRAFTING
+  OTHER
+}
+
+enum AppointmentStatus {
+  PENDING
+  CONFIRMED
+  COMPLETED
+  CANCELLED
+  RESCHEDULED
+}
+
+enum PaymentStatus {
+  PENDING
+  COMPLETED
+  FAILED
+  REFUNDED
+}
+
+enum TaskStatus {
+  TODO
+  IN_PROGRESS
+  REVIEW
+  DONE
+}
+
+enum DocumentType {
+  AADHAAR
+  PAN
+  PROPERTY_DOCUMENT
+  AGREEMENT
+  COURT_ORDER
+  PETITION
+  LEGAL_NOTICE
+  AFFIDAVIT
+  VAKALATNAMA
+  EVIDENCE
+  OTHER
+}
+
+model User {
+  id            String    @id @default(cuid())
+  name          String
+  email         String?   @unique
+  phone         String    @unique
+  passwordHash  String?
+  role          Role
+  isActive      Boolean   @default(true)
+  avatarUrl     String?
+  language      String    @default("en")
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  clientCases       Case[]        @relation("ClientCases")
+  advisorCases      Case[]        @relation("AdvisorCases")
+  assistantCases    Case[]        @relation("AssistantCases")
+  appointments      Appointment[] @relation("ClientAppointments")
+  managedAppointments Appointment[] @relation("ManagedAppointments")
+  documents         Document[]
+  payments          Payment[]
+  tasks             Task[]        @relation("AssignedTasks")
+  createdTasks      Task[]        @relation("CreatedTasks")
+  sentMessages      Message[]     @relation("SentMessages")
+  receivedMessages  Message[]     @relation("ReceivedMessages")
+  notifications     Notification[]
+  caseNotes         CaseNote[]
+  otpCodes          OtpCode[]
+
+  @@map("users")
+}
+
+model OtpCode {
+  id        String   @id @default(cuid())
+  userId    String?
+  phone     String
+  code      String
+  expiresAt DateTime
+  verified  Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  user User? @relation(fields: [userId], references: [id])
+
+  @@map("otp_codes")
+}
+
+model Case {
+  id            String     @id @default(cuid())
+  caseNumber    String     @unique
+  title         String
+  description   String
+  caseType      CaseType
+  status        CaseStatus @default(INQUIRY)
+  courtName     String?
+  courtCaseNo   String?
+  jurisdiction  String?
+  state         String?
+  filingDate    DateTime?
+  nextHearing   DateTime?
+  fee           Float?
+  feeAgreed     Boolean    @default(false)
+  priority      Int        @default(0)
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+
+  clientId      String
+  client        User       @relation("ClientCases", fields: [clientId], references: [id])
+  advisorId     String?
+  advisor       User?      @relation("AdvisorCases", fields: [advisorId], references: [id])
+  assistantId   String?
+  assistant     User?      @relation("AssistantCases", fields: [assistantId], references: [id])
+
+  appointments  Appointment[]
+  documents     Document[]
+  payments      Payment[]
+  tasks         Task[]
+  hearings      Hearing[]
+  notes         CaseNote[]
+  messages      Message[]
+
+  @@map("cases")
+}
+
+model Hearing {
+  id            String   @id @default(cuid())
+  caseId        String
+  case          Case     @relation(fields: [caseId], references: [id])
+  hearingDate   DateTime
+  courtName     String
+  purpose       String
+  outcome       String?
+  nextDate      DateTime?
+  notes         String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@map("hearings")
+}
+
+model Appointment {
+  id          String            @id @default(cuid())
+  caseId      String?
+  case        Case?             @relation(fields: [caseId], references: [id])
+  clientId    String
+  client      User              @relation("ClientAppointments", fields: [clientId], references: [id])
+  managedById String?
+  managedBy   User?             @relation("ManagedAppointments", fields: [managedById], references: [id])
+  date        DateTime
+  duration    Int               @default(30)
+  type        String            @default("in-person")
+  status      AppointmentStatus @default(PENDING)
+  notes       String?
+  guestName   String?
+  guestPhone  String?
+  guestEmail  String?
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+
+  @@map("appointments")
+}
+
+model Document {
+  id           String       @id @default(cuid())
+  caseId       String?
+  case         Case?        @relation(fields: [caseId], references: [id])
+  uploadedById String
+  uploadedBy   User         @relation(fields: [uploadedById], references: [id])
+  fileName     String
+  fileUrl      String
+  fileSize     Int
+  mimeType     String
+  docType      DocumentType @default(OTHER)
+  description  String?
+  isApproved   Boolean      @default(false)
+  createdAt    DateTime     @default(now())
+
+  @@map("documents")
+}
+
+model Payment {
+  id                String        @id @default(cuid())
+  caseId            String?
+  case              Case?         @relation(fields: [caseId], references: [id])
+  clientId          String
+  client            User          @relation(fields: [clientId], references: [id])
+  amount            Float
+  description       String
+  status            PaymentStatus @default(PENDING)
+  razorpayOrderId   String?
+  razorpayPaymentId String?
+  receiptUrl        String?
+  paidAt            DateTime?
+  createdAt         DateTime      @default(now())
+
+  @@map("payments")
+}
+
+model Task {
+  id           String     @id @default(cuid())
+  caseId       String?
+  case         Case?      @relation(fields: [caseId], references: [id])
+  assignedToId String
+  assignedTo   User       @relation("AssignedTasks", fields: [assignedToId], references: [id])
+  createdById  String
+  createdBy    User       @relation("CreatedTasks", fields: [createdById], references: [id])
+  title        String
+  description  String?
+  status       TaskStatus @default(TODO)
+  dueDate      DateTime?
+  priority     Int        @default(0)
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+
+  @@map("tasks")
+}
+
+model Message {
+  id         String   @id @default(cuid())
+  caseId     String?
+  case       Case?    @relation(fields: [caseId], references: [id])
+  senderId   String
+  sender     User     @relation("SentMessages", fields: [senderId], references: [id])
+  receiverId String
+  receiver   User     @relation("ReceivedMessages", fields: [receiverId], references: [id])
+  content    String
+  isRead     Boolean  @default(false)
+  createdAt  DateTime @default(now())
+
+  @@map("messages")
+}
+
+model CaseNote {
+  id        String   @id @default(cuid())
+  caseId    String
+  case      Case     @relation(fields: [caseId], references: [id])
+  authorId  String
+  author    User     @relation(fields: [authorId], references: [id])
+  content   String
+  isPrivate Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("case_notes")
+}
+
+model Notification {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  title     String
+  message   String
+  link      String?
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  @@map("notifications")
+}
+
+model GuestAppointment {
+  id            String            @id @default(cuid())
+  name          String
+  phone         String
+  email         String?
+  caseType      CaseType
+  preferredDate DateTime
+  message       String?
+  status        AppointmentStatus @default(PENDING)
+  createdAt     DateTime          @default(now())
+
+  @@map("guest_appointments")
+}
+
+model BlogPost {
+  id          String    @id @default(cuid())
+  title       String
+  slug        String    @unique
+  content     String
+  excerpt     String?
+  category    String
+  tags        String[]
+  isPublished Boolean   @default(false)
+  publishedAt DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@map("blog_posts")
+}

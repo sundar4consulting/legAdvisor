@@ -10,7 +10,10 @@ export default function Footer() {
           <div>
             <div className="flex items-center space-x-2 mb-4">
               <Scale className="h-7 w-7 text-amber-500" />
-              <span className="text-xl font-bold text-white">LegAdv</span>
+              <div className="flex flex-col">
+                <span className="text-xl font-bold text-white">Shivani Legal</span>
+                <span className="text-sm text-amber-400">Advisory Services Firm</span>
+              </div>
             </div>
             <p className="text-sm text-gray-400">
               Trusted civil law advisory services across Southern India. Expert legal counsel for property, family, consumer, and contractual matters.
@@ -55,14 +58,14 @@ export default function Footer() {
               </li>
               <li className="flex items-center space-x-2">
                 <Mail className="h-4 w-4 text-amber-500" />
-                <a href="mailto:contact@legadv.in" className="hover:text-amber-500">contact@legadv.in</a>
+                <a href="mailto:contact@shivanilegal.in" className="hover:text-amber-500">contact@shivanilegal.in</a>
               </li>
             </ul>
           </div>
         </div>
 
         <div className="border-t border-gray-800 mt-8 pt-8 flex flex-col md:flex-row justify-between items-center text-sm text-gray-500">
-          <p>&copy; {new Date().getFullYear()} LegAdv Legal Advisory. All rights reserved.</p>
+          <p>&copy; {new Date().getFullYear()} Shivani Legal Advisory Services Firm. All rights reserved.</p>
           <div className="flex space-x-6 mt-4 md:mt-0">
             <Link href="/privacy" className="hover:text-amber-500">Privacy Policy</Link>
             <Link href="/terms" className="hover:text-amber-500">Terms of Service</Link>

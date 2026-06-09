@@ -1,4 +1,4 @@
-# LegAdv - Legal Advisory Portal
+# Shivani Legal Advisory Services Firm
 ## System Design Document
 
 **Version:** 1.0  
@@ -25,7 +25,7 @@
 ## 1. Executive Summary
 
 ### 1.1 Purpose
-LegAdv is an integrated legal advisory platform designed to streamline legal services for clients, legal advisors, and legal assistants in the Indian judicial ecosystem. The platform bridges the gap between citizens seeking legal help and qualified legal professionals.
+Shivani Legal Advisory Services Firm Portal is an integrated legal advisory platform designed to streamline legal services for clients, legal advisors, and legal assistants in the Indian judicial ecosystem. The platform bridges the gap between citizens seeking legal help and qualified legal professionals.
 
 ### 1.2 Vision
 To create a unified platform that:
@@ -199,14 +199,14 @@ To create a unified platform that:
 │                                                            │
 │  📋 My Cases                                               │
 │  ┌──────────────────────────────────────────────────────┐ │
-│  │ LA-2026-1234 │ Property Dispute │ IN_PROGRESS │ →    │ │
-│  │ LA-2026-1235 │ Consumer Case    │ HEARING_SCH │ →    │ │
+│  │ SLA-2026-1234 │ Property Dispute │ IN_PROGRESS │ →    │ │
+│  │ SLA-2026-1235 │ Consumer Case    │ HEARING_SCH │ →    │ │
 │  └──────────────────────────────────────────────────────┘ │
 │                                                            │
 │  📅 Next Hearing                                           │
 │  ┌──────────────────────────────────────────────────────┐ │
 │  │ Jun 15, 2026 │ 10:30 AM │ District Court, Mumbai     │ │
-│  │ Case: LA-2026-1235 │ Consumer Protection Act         │ │
+│  │ Case: SLA-2026-1235 │ Consumer Protection Act         │ │
 │  └──────────────────────────────────────────────────────┘ │
 └────────────────────────────────────────────────────────────┘
 ```
@@ -246,9 +246,9 @@ To create a unified platform that:
 │          │                                                 │
 │          │  ⚡ Pending Tasks                               │
 │          │  ┌──────────────────────────────────────────┐   │
-│          │  │ □ Draft reply - LA-2026-1234 │ Due Today │   │
+│          │  │ □ Draft reply - SLA-2026-1234 │ Due Today │   │
 │          │  │ □ File vakalatnama - New client │ Jun 10 │   │
-│          │  │ □ Submit evidence - LA-2026-1200 │Jun 12 │   │
+│          │  │ □ Submit evidence - SLA-2026-1200 │Jun 12 │   │
 │          │  └──────────────────────────────────────────┘   │
 └──────────┴─────────────────────────────────────────────────┘
 ```

@@ -25,7 +25,7 @@ export default function HomePage() {
             <div className="max-w-3xl">
               <div className="flex items-center space-x-2 mb-4">
                 <Scale className="h-6 w-6 text-amber-400" />
-                <span className="text-amber-400 font-medium">Trusted Legal Advisory</span>
+                <span className="text-amber-400 font-medium">Shivani Legal Advisory Services Firm</span>
               </div>
               <h1 className="text-4xl lg:text-6xl font-bold leading-tight mb-6">
                 Expert Civil Law Counsel for{' '}

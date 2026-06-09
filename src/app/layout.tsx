@@ -14,8 +14,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "LegAdv - Civil Law Advisory Services | Southern India",
-  description: "Expert legal advisory services for civil cases across Tamil Nadu, Karnataka, Kerala, Andhra Pradesh & Telangana. Property disputes, family law, consumer protection & more.",
+  title: "Shivani Legal Advisory Services Firm | Expert Civil Law Counsel",
+  description: "Shivani Legal Advisory Services Firm - Expert legal advisory services for civil cases across Tamil Nadu, Karnataka, Kerala, Andhra Pradesh & Telangana. Property disputes, family law, consumer protection & more.",
 };
 
 export default function RootLayout({

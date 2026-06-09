@@ -18,7 +18,7 @@ export function authenticateRequest(request: NextRequest): JWTPayload | null {
 export function generateCaseNumber(): string {
   const year = new Date().getFullYear()
   const random = Math.floor(1000 + Math.random() * 9000)
-  return `LA-${year}-${random}`
+  return `SLA-${year}-${random}`
 }
 
 export function formatDate(date: Date | string): string {

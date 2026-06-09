@@ -52,7 +52,7 @@ export default function AboutPage() {
               <div>
                 <h2 className="text-3xl font-bold text-gray-900 mb-6">Our Mission</h2>
                 <p className="text-gray-600 mb-4">
-                  At LegAdv, we believe that quality legal counsel should be accessible to everyone.
+                  At Shivani Legal Advisory Services Firm, we believe that quality legal counsel should be accessible to everyone.
                   Our mission is to simplify the legal process for our clients, providing transparent,
                   affordable, and effective representation in civil matters across Southern India.
                 </p>
